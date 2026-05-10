@@ -1,12 +1,16 @@
 import os
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext
 from llama_index.vector_stores.postgres import PGVectorStore
-from llama_index.llms.groq import Groq
+from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
-# 1. Configure LlamaIndex to use Groq for logic and a small local model for embeddings
+# 1. Configure LlamaIndex to use the OpenAI connector pointing at Groq's servers
 # Switched to 8b-instant to resolve the "model decommissioned" 400 error
-Settings.llm = Groq(model="llama-3.1-8b-instant", api_key=os.getenv("GROQ_API_KEY"))
+Settings.llm = OpenAI(
+    model="llama-3.1-8b-instant", 
+    api_key=os.getenv("GROQ_API_KEY"),
+    api_base="https://api.groq.com/openai/v1"
+)
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 class KnowledgeService:
