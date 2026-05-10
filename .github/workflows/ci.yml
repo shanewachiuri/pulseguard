@@ -9,33 +9,72 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    # Spin up a temporary TimescaleDB instance for the backend tests
+    services:
+      postgres:
+        image: timescale/timescaledb:latest-pg15
+        env:
+          POSTGRES_USER: pulseuser
+          POSTGRES_PASSWORD: pulsepassword
+          POSTGRES_DB: pulsedb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup pnpm v9 using the latest v4 action
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.0.0
           run_install: false
 
-      # Setup Node.js and tell it to cache pnpm modules
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
 
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Verify Code Formatting
         run: pnpm run format
 
+      # 👇 NEW STEP: Install Foundry so 'forge build' works 👇
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Build all apps and packages
         run: pnpm run build
 
-      # Run our Pytest and Solidity test suites via Turborepo
+      # 👇 ADDED PYTHON SETUP FOR BACKEND TESTS 👇
+      - name: Install uv (Python Package Manager)
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Generate Prisma Client & Push Schema
+        working-directory: ./apps/backend
+        env:
+          DATABASE_URL: "postgresql://pulseuser:pulsepassword@localhost:5432/pulsedb"
+        run: |
+          npx prisma generate
+          npx prisma db push --accept-data-loss
+
       - name: Run Tests
+        env:
+          DATABASE_URL: "postgresql://pulseuser:pulsepassword@localhost:5432/pulsedb"
+          GROQ_API_KEY: "dummy_key_for_ci_tests"
+          ENVIRONMENT: "testing"
         run: pnpm turbo run test
