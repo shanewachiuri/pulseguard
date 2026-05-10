@@ -9,7 +9,17 @@
     },
     
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": [
+        "DATABASE_URL",
+        "GROQ_API_KEY",
+        "ENVIRONMENT",
+        "POLYGON_AMOY_RPC_URL",
+        "VECTOR_DB_NAME",
+        "VECTOR_DB_USER",
+        "VECTOR_DB_PASSWORD",
+        "VECTOR_DB_PORT"
+      ]
     },
    
     "lint": {
