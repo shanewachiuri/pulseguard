@@ -1,0 +1,41 @@
+name: PulseGuard CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup pnpm v9 using the latest v4 action
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
+
+      # Setup Node.js and tell it to cache pnpm modules
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify Code Formatting
+        run: pnpm run format
+
+      - name: Build all apps and packages
+        run: pnpm run build
+
+      # Run our Pytest and Solidity test suites via Turborepo
+      - name: Run Tests
+        run: pnpm turbo run test

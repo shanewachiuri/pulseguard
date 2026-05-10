@@ -1,0 +1,10 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
+    "build": "echo 'Python backend does not require a JS build step'",
+    "test": "uv run pytest -v"
+  }
+}

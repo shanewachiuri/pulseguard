@@ -1,0 +1,19 @@
+# Aggressively block ALL node_modules and Python envs everywhere in the tree
+
+**/node_modules/
+**/.venv/
+**/venv/
+**/**pycache**/
+
+# Ignore local Expo caches and build folders
+
+.expo/
+dist/
+build/
+android/
+ios/
+
+# Ignore database files
+
+_.db
+_.sqlite3

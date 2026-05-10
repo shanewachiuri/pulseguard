@@ -1,0 +1,13 @@
+{
+  "dashboard": {
+    "title": "PulseGuard",
+    "score": "Score",
+    "active_coverage": "Active Coverage",
+    "premium": "Premium",
+    "status": "Status",
+    "start_trip": "Start Boda Trip",
+    "report_incident": "Report Incident / Claim",
+    "sync": "Sync Offline Data",
+    "logout": "Log Out"
+  }
+}

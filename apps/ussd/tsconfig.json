@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "esnext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["esnext"],
+    "types": ["node"], /* Ensure 'npm install -D @types/node' is run */
+
+    /* Interop & Modern Syntax */
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* Output & Debugging */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx"
+  }
+}

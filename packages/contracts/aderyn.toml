@@ -1,0 +1,3 @@
+[aderyn]
+foundry_config_path = "foundry.toml"
+src_folder = "src"

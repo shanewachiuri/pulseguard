@@ -1,0 +1,23 @@
+# Block all heavy dependencies across the entire monorepo
+
+**/node_modules/
+**/.venv/
+**/venv/
+**/**pycache**/
+
+# Block local build caches
+
+**/.expo/
+**/dist/
+**/build/
+**/android/
+\*\*/ios/
+
+# Block large local databases
+
+**/\*.db
+**/\*.sqlite3
+
+# Block Git history (EAS doesn't need your commit history to build)
+
+.git/

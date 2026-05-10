@@ -1,0 +1,14 @@
+services:
+  db:
+    image: timescale/timescaledb-ha:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pulseguard_dev
+      POSTGRES_DB: pulseguard
+    ports:
+      - "5433:5432"
+    volumes:
+      - pulseguard_data:/home/postgres/pgdata/data
+
+volumes:
+  pulseguard_data:

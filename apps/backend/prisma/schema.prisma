@@ -1,0 +1,55 @@
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String        @id @default(uuid())
+  phone     String        @unique // Safaricom/M-Pesa number format
+  name      String?
+  policies  MicroPolicy[] // FIXED: Added [] to establish a true One-to-Many relationship
+  createdAt DateTime      @default(now())
+}
+
+model Telematics {
+  id        String   @id @default(uuid())
+  phone     String
+  latitude  Float
+  longitude Float
+  speed     Float    // Measured in km/h
+  timestamp DateTime @default(now())
+
+  // Fixed: explicitly naming the columns to index for fast database queries
+  @@index([phone])
+  @@index([timestamp])
+}
+
+model Partner {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g., "One Acre Fund", "LittleCab"
+  apiKeyHash  String   @unique
+  webhookUrl  String?       // NEW: Where we send updates
+  webhookSecret String?       // NEW: Cryptographic secret for signing payloads
+  policies    MicroPolicy[] // NEW: One-to-many relationship (added the '[]')
+  createdAt   DateTime @default(now())
+}
+
+model MicroPolicy {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  partnerId      String?  // NEW: Links policy to the partner who sold it
+  partner        Partner? @relation(fields: [partnerId], references: [id])
+  pulseScore     Int
+  coverageType   String
+  premiumAmount  Float
+  assessmentText String
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+}
