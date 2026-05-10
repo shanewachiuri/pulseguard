@@ -15,15 +15,15 @@ Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 class KnowledgeService:
     def __init__(self):
-        # 2. Connect to our existing Docker PostgreSQL database
+        # 2. Connect dynamically based on environment (CI vs Local)
         self.vector_store = PGVectorStore.from_params(
-            database="pulseguard",
-            host="localhost",
-            password="pulseguard_dev",
-            port=5433,
-            user="postgres",
+            database=os.getenv("VECTOR_DB_NAME", "pulseguard"),
+            host=os.getenv("VECTOR_DB_HOST", "localhost"),
+            password=os.getenv("VECTOR_DB_PASSWORD", "pulseguard_dev"),
+            port=int(os.getenv("VECTOR_DB_PORT", "5433")), # Parse as integer!
+            user=os.getenv("VECTOR_DB_USER", "postgres"),
             table_name="insurance_knowledge",
-            embed_dim=384,  # Matches the dimension of the bge-small-en-v1.5 model
+            embed_dim=384,
         )
         self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
 

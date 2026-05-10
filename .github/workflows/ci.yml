@@ -79,6 +79,12 @@ jobs:
           DATABASE_URL: "postgresql://pulseuser:pulsepassword@localhost:5432/pulsedb"
           GROQ_API_KEY: "dummy_key_for_ci_tests"
           ENVIRONMENT: "testing"
-          # 👇 Add this fallback so forge test doesn't crash 👇
           POLYGON_AMOY_RPC_URL: "https://rpc-amoy.polygon.technology"
+
+          # 👇 Tell the AI exactly where the temporary CI database is 👇
+          VECTOR_DB_NAME: "pulsedb"
+          VECTOR_DB_USER: "pulseuser"
+          VECTOR_DB_PASSWORD: "pulsepassword"
+          VECTOR_DB_PORT: "5432"
+
         run: pnpm turbo run test
