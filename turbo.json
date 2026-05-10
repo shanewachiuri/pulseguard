@@ -18,7 +18,8 @@
         "VECTOR_DB_NAME",
         "VECTOR_DB_USER",
         "VECTOR_DB_PASSWORD",
-        "VECTOR_DB_PORT"
+        "VECTOR_DB_PORT",
+        "ORACLE_PRIVATE_KEY"
       ]
     },
    

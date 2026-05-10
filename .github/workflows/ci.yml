@@ -80,11 +80,10 @@ jobs:
           GROQ_API_KEY: "dummy_key_for_ci_tests"
           ENVIRONMENT: "testing"
           POLYGON_AMOY_RPC_URL: "https://rpc-amoy.polygon.technology"
-
-          # 👇 Tell the AI exactly where the temporary CI database is 👇
           VECTOR_DB_NAME: "pulsedb"
           VECTOR_DB_USER: "pulseuser"
           VECTOR_DB_PASSWORD: "pulsepassword"
           VECTOR_DB_PORT: "5432"
-
+          # 👇 Add a mathematically valid dummy private key for Web3 👇
+          ORACLE_PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
         run: pnpm turbo run test
