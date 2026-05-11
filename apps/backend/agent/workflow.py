@@ -8,7 +8,13 @@ if not api_key:
     print("⚠️ Warning: GROQ_API_KEY not found in environment.")
 
 # CRITICAL FIX: Retaining the 8b-instant model to prevent the "model decommissioned" 400 error
-llm = ChatGroq(model="llama-3.1-8b-instant", api_key=api_key)
+# 👇 Added max_tokens and temperature to respect Groq's free tier 👇
+llm = ChatGroq(
+    model="llama-3.1-8b-instant", 
+    api_key=api_key,
+    temperature=0,
+    max_tokens=1024
+)
 
 # Toolkit
 tools = [fetch_kmd_weather_index, search_insurance_guidelines]
