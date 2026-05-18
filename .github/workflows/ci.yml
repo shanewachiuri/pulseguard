@@ -53,6 +53,9 @@ jobs:
       # 👇 NEW STEP: Install Foundry so 'forge build' works 👇
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        env:
+          # 👇 This bypasses the 403 API rate limit! 👇
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build all apps and packages
         run: pnpm run build
