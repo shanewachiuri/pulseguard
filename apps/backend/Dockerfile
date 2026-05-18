@@ -1,23 +1,26 @@
 # Use a lightweight Python base image
 FROM python:3.12-slim
 
-# Grab the ultra-fast uv package manager from their official image
+# Grab the ultra-fast uv package manager
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy ONLY the dependency files first (this caches your installs so future builds are 10x faster)
+# Copy dependencies first
 COPY pyproject.toml uv.lock ./
 
-# Install the production dependencies securely
+# Install production dependencies
 RUN uv sync --frozen --no-dev
 
-# Copy the rest of your backend code into the container
+# Copy the rest of your code
 COPY . .
 
-# Expose the port the API will run on
+# 👇 FIX: Generate the Prisma Client using the schema you just copied 👇
+RUN uv run prisma generate
+
+# Expose the port
 EXPOSE 8000
 
-# Boot up the FastAPI server using uv
+# Boot up the FastAPI server
 CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
